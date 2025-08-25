@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Param, Post, Query } from '@nestjs/common';
 
 @Controller('/api/users')
 export class UserController {
@@ -10,5 +10,16 @@ export class UserController {
   @Get('/sample')
   get(): string {
     return 'GET';
+  }
+
+  // Decorator HTTP Request di NestJS
+  @Get('/hello')
+  sayHello(@Query('name') name: string, @Query('age') age: string): string {
+    return `Hi ${name || 'stranger'}, you're ${age || 0}`;
+  }
+
+  @Get('/:id')
+  getById(@Param('id') id: string): string {
+    return `GET ${id}`;
   }
 }
