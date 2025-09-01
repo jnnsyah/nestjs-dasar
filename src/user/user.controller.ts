@@ -5,12 +5,26 @@ import {
   HttpCode,
   Post,
   Query,
+  Render,
+  Req,
   Res,
 } from '@nestjs/common';
 import express from 'express';
 
 @Controller('/api/users')
 export class UserController {
+  @Get('/set-cookie')
+  setCookie(@Query('name') name: string, @Res() res: express.Response) {
+    res.cookie('name', name);
+    res.status(200).send('Set Cookie Success');
+  }
+
+  @Get('/get-cookie')
+  getCookie(@Req() req: express.Request): string {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return req.cookies['name'];
+  }
+
   @Post()
   post(): string {
     return 'POST';
@@ -62,5 +76,17 @@ export class UserController {
   @HttpCode(404)
   getFlag(): string {
     return 'Flag';
+  }
+
+  @Get('/hello-flag')
+  @Render('index.html')
+  helloView(@Query('name') name: string) {
+    if (name === 'flag') {
+      name = 'Flag-01{Hahahy}';
+    }
+    return {
+      title: 'View Engine',
+      name: name,
+    };
   }
 }
