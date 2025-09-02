@@ -3,6 +3,7 @@ import {
   Get,
   Header,
   HttpCode,
+  // Inject,
   Post,
   Query,
   Render,
@@ -10,9 +11,28 @@ import {
   Res,
 } from '@nestjs/common';
 import express from 'express';
+import { UserService } from './user/user.service';
+import { Connection } from './connection/connection';
 
 @Controller('/api/users')
 export class UserController {
+  constructor(
+    private service: UserService,
+    private connection: Connection,
+  ) {}
+  // @Inject()
+  // private service: UserService;
+
+  @Get('/connection')
+  getConnection() {
+    return this.connection.getName();
+  }
+
+  @Get('/depedencies-injection')
+  sayHallo(@Query('name') name: string) {
+    return this.service.sayHallo(name);
+  }
+
   @Get('/set-cookie')
   setCookie(@Query('name') name: string, @Res() res: express.Response) {
     res.cookie('name', name);
