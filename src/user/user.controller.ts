@@ -13,18 +13,24 @@ import {
 import express from 'express';
 import { UserService } from './user/user.service';
 import { Connection } from './connection/connection';
+import { MailService } from './mail/mail.service';
+import { UserRepository } from './user-repository/user-repository';
 
 @Controller('/api/users')
 export class UserController {
   constructor(
     private service: UserService,
     private connection: Connection,
+    private mail: MailService,
+    private userRepository: UserRepository,
   ) {}
   // @Inject()
   // private service: UserService;
 
   @Get('/connection')
   getConnection() {
+    this.userRepository.save();
+    this.mail.send();
     return this.connection.getName();
   }
 
