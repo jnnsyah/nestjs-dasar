@@ -15,20 +15,28 @@ import {
 @Module({
   controllers: [UserController],
   providers: [
+    // Class Provider
     UserService,
     {
       provide: Connection,
       useClass:
         process.env.DATABASE == 'mysql' ? mySQLConnection : mongoDBConnection,
     },
+    // Value Provider
     {
       provide: MailService,
       useValue: mailService,
     },
+    // Factory Provider
     {
       provide: UserRepository,
       useFactory: createUserRepository,
       inject: [Connection],
+    },
+    // Alias Provider
+    {
+      provide: 'EmailService',
+      useExisting: MailService,
     },
   ],
 })

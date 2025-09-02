@@ -3,7 +3,7 @@ import {
   Get,
   Header,
   HttpCode,
-  // Inject,
+  Inject,
   Post,
   Query,
   Render,
@@ -23,6 +23,7 @@ export class UserController {
     private connection: Connection,
     private mail: MailService,
     private userRepository: UserRepository,
+    @Inject('EmailService') private email: MailService,
   ) {}
   // @Inject()
   // private service: UserService;
@@ -31,6 +32,8 @@ export class UserController {
   getConnection() {
     this.userRepository.save();
     this.mail.send();
+    // Alias Provider
+    this.email.send();
     return this.connection.getName();
   }
 
