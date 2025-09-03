@@ -3,16 +3,14 @@ import { UserController } from './user.controller';
 import { UserService } from './user/user.service';
 import { Connection, createConnection } from './connection/connection';
 import { mailService, MailService } from './mail/mail.service';
-import {
-  createUserRepository,
-  UserRepository,
-} from './user-repository/user-repository';
+import { UserRepository } from './user-repository/user-repository';
 import { ConfigService } from '@nestjs/config';
 
 @Module({
   controllers: [UserController],
   providers: [
     // Class Provider
+    UserRepository,
     UserService,
     {
       provide: Connection,
@@ -25,11 +23,11 @@ import { ConfigService } from '@nestjs/config';
       useValue: mailService,
     },
     // Factory Provider
-    {
-      provide: UserRepository,
-      useFactory: createUserRepository,
-      inject: [Connection],
-    },
+    // {
+    //   provide: UserRepository,
+    //   useFactory: createUserRepository,
+    //   inject: [Connection],
+    // },
     // Alias Provider
     {
       provide: 'EmailService',

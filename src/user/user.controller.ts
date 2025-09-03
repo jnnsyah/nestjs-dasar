@@ -28,9 +28,18 @@ export class UserController {
   // @Inject()
   // private service: UserService;
 
+  @Get('/create-user')
+  createUser(@Query('name') name: string, @Query('email') email: string) {
+    return this.userRepository.createUser(name, email);
+  }
+
+  @Get('/get-users')
+  getUser() {
+    return this.userRepository.getUsers();
+  }
+
   @Get('/connection')
   getConnection() {
-    this.userRepository.save();
     this.mail.send();
     // Alias Provider
     this.email.send();
