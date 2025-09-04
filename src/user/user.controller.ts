@@ -9,12 +9,14 @@ import {
   Render,
   Req,
   Res,
+  UseFilters,
 } from '@nestjs/common';
 import express from 'express';
 import { UserService } from './user/user.service';
 import { Connection } from './connection/connection';
 import { MailService } from './mail/mail.service';
 import { UserRepository } from './user-repository/user-repository';
+import { ValidationFilter } from 'src/validation/validation.filter';
 
 @Controller('/api/users')
 export class UserController {
@@ -47,6 +49,7 @@ export class UserController {
   }
 
   @Get('/depedencies-injection')
+  @UseFilters(ValidationFilter)
   sayHallo(@Query('name') name: string) {
     return this.service.sayHallo(name);
   }
