@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
@@ -10,6 +15,7 @@ import { WinstonModule } from 'nest-winston';
 import { PrismaModule } from './prisma/prisma.module';
 import { ValidationModule } from './validation/validation.module';
 import winston from 'winston';
+import { LogMiddleware } from './log/log.middleware';
 
 @Module({
   imports: [
@@ -28,4 +34,11 @@ import winston from 'winston';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LogMiddleware).forRoutes({
+      path: '/api/*',
+      method: RequestMethod.ALL,
+    });
+  }
+}
