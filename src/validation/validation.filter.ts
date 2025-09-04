@@ -13,7 +13,7 @@ export class ValidationFilter implements ExceptionFilter<ZodError> {
     response.status(400).json({
       code: 400,
       errors: exception.issues.map((issue) => ({
-        input: issue.input,
+        path: issue.path.join('.'),
         message: issue.message,
         code: issue.code,
       })),

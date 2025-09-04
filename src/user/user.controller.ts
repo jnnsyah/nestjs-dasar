@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   Header,
@@ -20,6 +21,11 @@ import { Connection } from './connection/connection';
 import { MailService } from './mail/mail.service';
 import { UserRepository } from './user-repository/user-repository';
 import { ValidationFilter } from 'src/validation/validation.filter';
+import {
+  LoginUserRequest,
+  loginUserRequestValidation,
+} from 'src/model/login.model';
+import { ValidationPipe } from 'src/validation/validation.pipe';
 
 @Controller('/api/users')
 export class UserController {
@@ -32,6 +38,15 @@ export class UserController {
   ) {}
   // @Inject()
   // private service: UserService;
+
+  @Post('/login')
+  @UseFilters(ValidationFilter)
+  login(
+    @Body(new ValidationPipe(loginUserRequestValidation))
+    request: LoginUserRequest,
+  ) {
+    return `Hello ${request.username}`;
+  }
 
   @Get('/pipe-id/:id')
   getId(@Param('id', ParseIntPipe) id: number) {
