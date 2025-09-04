@@ -3,7 +3,10 @@ import {
   Get,
   Header,
   HttpCode,
+  HttpException,
   Inject,
+  Param,
+  ParseIntPipe,
   Post,
   Query,
   Render,
@@ -30,8 +33,22 @@ export class UserController {
   // @Inject()
   // private service: UserService;
 
+  @Get('/pipe-id/:id')
+  getId(@Param('id', ParseIntPipe) id: number) {
+    return `Get Id yang sudah di pipe, ${id}`;
+  }
+
   @Get('/create-user')
   createUser(@Query('name') name: string, @Query('email') email: string) {
+    if (!email) {
+      throw new HttpException(
+        {
+          code: 400,
+          errors: 'Emailnya di isi ya kaka',
+        },
+        400,
+      );
+    }
     return this.userRepository.createUser(name, email);
   }
 
