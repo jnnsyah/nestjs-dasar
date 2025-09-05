@@ -14,6 +14,7 @@ import {
   Req,
   Res,
   UseFilters,
+  UseInterceptors,
 } from '@nestjs/common';
 import express from 'express';
 import { UserService } from './user/user.service';
@@ -26,6 +27,7 @@ import {
   loginUserRequestValidation,
 } from 'src/model/login.model';
 import { ValidationPipe } from 'src/validation/validation.pipe';
+import { TimeInterceptor } from 'src/time/time.interceptor';
 
 @Controller('/api/users')
 export class UserController {
@@ -41,6 +43,7 @@ export class UserController {
 
   @Post('/login')
   @UseFilters(ValidationFilter)
+  @UseInterceptors(TimeInterceptor)
   login(
     @Body(new ValidationPipe(loginUserRequestValidation))
     request: LoginUserRequest,
