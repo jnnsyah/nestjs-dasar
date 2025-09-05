@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  UseGuards,
   Get,
   Header,
   HttpCode,
@@ -30,6 +31,7 @@ import { ValidationPipe } from 'src/validation/validation.pipe';
 import { TimeInterceptor } from 'src/time/time.interceptor';
 import { Auth } from 'src/auth/auth.decorator';
 import type { User } from '@prisma/client';
+import { RoleGuard } from 'src/role/role.guard';
 
 @Controller('/api/users')
 export class UserController {
@@ -44,6 +46,7 @@ export class UserController {
   // private service: UserService;
 
   @Get('/current')
+  @UseGuards(new RoleGuard(['user']))
   current(@Auth() user: User) {
     return {
       data: `Hello ${user.name}`,
