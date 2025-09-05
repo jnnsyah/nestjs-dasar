@@ -28,6 +28,8 @@ import {
 } from 'src/model/login.model';
 import { ValidationPipe } from 'src/validation/validation.pipe';
 import { TimeInterceptor } from 'src/time/time.interceptor';
+import { Auth } from 'src/auth/auth.decorator';
+import type { User } from '@prisma/client';
 
 @Controller('/api/users')
 export class UserController {
@@ -40,6 +42,13 @@ export class UserController {
   ) {}
   // @Inject()
   // private service: UserService;
+
+  @Get('/current')
+  current(@Auth() user: User) {
+    return {
+      data: `Hello ${user.name}`,
+    };
+  }
 
   @Post('/login')
   @UseFilters(ValidationFilter)
